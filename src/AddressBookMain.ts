@@ -1,31 +1,24 @@
-import  {ContactPerson}  from "./modal/ContactPeron";
-import { AddressBook } from './modal/AddressBook';
-class AddressBookMain
-{
-    welcomeToAddressBook():void
-   {
-     console.log(" Welcome to the Address Book Program");
-   }
+import { Contact } from "./models/ContactPeron";
+class AddressBookMain {
+    displayWelcomeMessage() : void{
+        console.log("Welcome to my Address Book Program");
+    }
 
-   private addressBook = new AddressBook()
-   run():void
-   {
-    this.welcomeToAddressBook()
-     const contact1 = new ContactPerson(
-      "Ashwin",
-      "D",
-      "S.s.colony",
-      "Kalavasal",
-      "TN",
-      603203,
-      1234567890,
-      "ashwin@gmail.com"
-    );
-    this.addressBook.addAccount(contact1)
-    this.addressBook.getAllContacts()
-    
-   }
-   
+    start() : void {
+        this.displayWelcomeMessage()
+
+        const contact = new Contact (
+            "Ashwin",
+            "D",
+            "S.S.Colony", 
+            "Kalavasal",
+            "Madurai",
+            576124,
+            12346788889,
+            "ashwin@gmail.com"
+        )
+        contact.displayContact()
+    }
 }
-const addressApp =new AddressBookMain()
-addressApp.run()
+const addressBook = new AddressBookMain()
+addressBook.start()
