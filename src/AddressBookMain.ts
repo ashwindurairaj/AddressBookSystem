@@ -1,67 +1,31 @@
-import * as readline from "readline-sync";
-import { AddressBook } from "./modal/AddressBook";
-import { Contact } from "./modal/ContactPeron";
+import readlineSync from "readline-sync";
+import { AddressBook } from "./Services/AddressBook";
+import { Contact } from "./models/ContactPeron";
 
-class AddressBookApp {
-  private addressBook = new AddressBook();
+class AddressBookMain {
+    private addressBook = new AddressBook();
 
-  private showMenu(): void {
-    console.log("\n==== Address Book ====");
-    console.log("1. Add Contact");
-    console.log("2. View Contacts");
-    console.log("3. Exit");
-  }
-
-  private getContactDetails(): Omit<Contact, 'id'> {
-    console.log("\nEnter Contact Details:");
-    return {
-      firstName: readline.question("First Name: "),
-      lastName: readline.question("Last Name: "),
-      address: readline.question("Address: "),
-      city: readline.question("City: "),
-      state: readline.question("State: "),
-      zip: readline.question("Zip Code (6 digits): "),
-      phone: readline.question("Phone: "),
-      email: readline.question("Email: ")
-    };
-  }
-
-  run(): void {
-    console.log("Welcome to Address Book System");
-
-    while (true) {
-      this.showMenu();
-      const choice = readline.question("Choose option (1-3): ");
-
-      switch (choice) {
-        case "1":
-          try {
-            const contact = this.addressBook.addContact(this.getContactDetails());
-            console.log("\n Contact added successfully!");
-            console.log(contact.toString());
-          } catch (error) {
-            if (error instanceof Error) {
-              console.error("\n Error:", error.message);
-            } else {
-              console.error("\n An unknown error occurred");
-            }
-          }
-          break;
-
-        case "2":
-          this.addressBook.displayContacts();
-          break;
-
-        case "3":
-          console.log(" Goodbye!");
-          return;
-
-        default:
-          console.log(" Invalid choice. Please try again.");
-      }
+    displayWelcomeMessage(): void {
+        console.log(" Welcome to my Address Book Program");
     }
-  }
+
+    start(): void {
+        this.displayWelcomeMessage();
+
+        const firstName = readlineSync.question("Enter First Name: ");
+        const lastName = readlineSync.question("Enter Last Name: ");
+        const address = readlineSync.question("Enter Address: ");
+        const city = readlineSync.question("Enter City: ");
+        const state = readlineSync.question("Enter State: ");
+        const zip = parseInt(readlineSync.question("Enter Zip Code: "));
+        const phoneNumber = parseInt(readlineSync.question("Enter Phone Number: "));
+        const email = readlineSync.question("Enter Email: ");
+
+        const contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
+
+        this.addressBook.addContact(contact);
+    }
 }
 
-// Start the application
-new AddressBookApp().run();
+const app = new AddressBookMain();
+app.start();
