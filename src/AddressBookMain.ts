@@ -4,7 +4,7 @@ class AddressBookMain
 {
     welcomeToAddressBook():void
    {
-     console.log("👋 Welcome to the Address Book Program");
+     console.log(" Welcome to the Address Book Program");
    }
 
    private addressBook = new AddressBook()
@@ -12,14 +12,14 @@ class AddressBookMain
    {
     this.welcomeToAddressBook()
      const contact1 = new ContactPerson(
-      "Vinay",
-      "G",
-      "Hosmane Main Road",
-      "Bhadravathi",
-      "KA",
-      577301,
-      12345678,
-      "Vinay@gmail.com"
+      "Ashwin",
+      "D",
+      "S.s.colony",
+      "Kalavasal",
+      "TN",
+      603203,
+      1234567890,
+      "ashwin@gmail.com"
     );
     this.addressBook.addAccount(contact1)
     this.addressBook.getAllContacts()

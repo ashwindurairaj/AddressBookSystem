@@ -13,7 +13,7 @@ export class AddressBook{
     }
     
     getAllContacts(): void {
-    console.log("📇 Contact List:");
+    console.log(" Contact List:");
     this.contacts.forEach((contact, i) => console.log(`${i + 1}. ${contact.toString()}`));
   }
     
