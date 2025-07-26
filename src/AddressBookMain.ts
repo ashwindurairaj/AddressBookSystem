@@ -1,67 +1,45 @@
-import * as readline from "readline-sync";
-import { AddressBook } from "./modal/AddressBook";
-// import { Contact } from "./models/Contact";
+import readlineSync from "readline-sync";
+import { AddressBook } from "./Services/AddressBook";
+import { Contact } from "./models/ContactPeron";
 
-class AddressBookApp {
-  private addressBook = new AddressBook();
+class AddressBookMain {
+    private addressBook = new AddressBook();
 
-  private showMenu(): void {
-    console.log("\n==== Address Book Menu ====");
-    console.log("1. Add Contact");
-    console.log("2. View Contacts");
-    console.log("3. Edit Contact");
-    console.log("4. Delete Contact");
-    console.log("5. Exit");
-  }
-
-  private getDeleteConfirmation(name: string): boolean {
-    const answer = readline.question(
-      `Are you sure you want to delete ${name}? (y/n): `
-    );
-    return answer.toLowerCase() === 'y';
-  }
-
-  run(): void {
-    console.log("Welcome to Address Book System");
-
-    while (true) {
-      this.showMenu();
-      const choice = readline.question("Choose option (1-5): ");
-
-      switch (choice) {
-        // ... existing cases 1-3 ...
-
-        case "4":
-          try {
-            console.log("\nEnter contact to delete:");
-            const firstName = readline.question("First Name: ");
-            const lastName = readline.question("Last Name: ");
-            const fullName = `${firstName} ${lastName}`;
-
-            if (this.getDeleteConfirmation(fullName)) {
-              const deleted = this.addressBook.deleteContact(firstName, lastName);
-              if (deleted) {
-                console.log(`\n Contact ${fullName} deleted successfully!`);
-              } else {
-                console.log(`\n Contact ${fullName} not found`);
-              }
-            } else {
-              console.log("\nDeletion cancelled");
-            }
-          } catch (error) {
-            console.error("\n Error:", error instanceof Error ? error.message : "Failed to delete contact");
-          }
-          break;
-
-        case "5":
-          console.log(" Goodbye!");
-          return;
-
-        default:
-          console.log(" Invalid choice. Please try again.");
-      }
+    displayWelcomeMessage(): void {
+        console.log(" Welcome to my Address Book Program");
     }
-  }
-}
 
-new AddressBookApp().run();
+    start(): void {
+        this.displayWelcomeMessage();
+        this.addContactFromConsole();
+    }
+
+    private addContactFromConsole(): void {
+        console.log("Add the contact details : ")
+        const firstName = readlineSync.question("Enter First Name: ");
+        const lastName = readlineSync.question("Enter Last Name: ");
+        const address = readlineSync.question("Enter Address: ");
+        const city = readlineSync.question("Enter City: ");
+        const state = readlineSync.question("Enter State: ");
+        const zip = parseInt(readlineSync.question("Enter Zip Code: "));
+        const phoneNumber = parseInt(readlineSync.question("Enter Phone Number: "));
+        const email = readlineSync.question("Enter Email: ");
+
+        const contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
+        this.addressBook.addContact(contact);
+
+        const shouldEdit = readlineSync.question("Do you want to edit this contact now ? (y/n): ")
+        if(shouldEdit.toLowerCase() === "y"){
+            this.addressBook.editContactByName(firstName)
+            console.log("\n  Contact Updated successfully!\n");
+        }
+
+        const shouldDelete = readlineSync.question(" Do you want to delete the contact details? (y/n): ")
+        if(shouldDelete.toLowerCase() === "y") {
+            this.addressBook.deleteContactByName(firstName)
+            console.log("\n  Contact deleted successfully!");
+        }
+    }
+}
+const app = new AddressBookMain();
+app.start();
