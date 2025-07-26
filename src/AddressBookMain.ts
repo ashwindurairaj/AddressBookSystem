@@ -1,88 +1,87 @@
-import * as readline from "readline-sync";
-import { AddressBook } from "./modal/AddressBook";
-import { IContactData } from "./modal/ContactPeron";
+import readlineSync from "readline-sync";
+import { AddressBook } from "./Services/AddressBook";
+import { Contact } from "./models/ContactPeron";
+import { isValidEmail, isValidPhoneNumber, isValidZipCode } from "./Utils/Validator";
 
-class AddressBookApp {
+class AddressBookMain {
     private addressBook = new AddressBook();
 
-    private showMenu(): void {
-        console.log("\n==== Address Book ====");
-        console.log("1. Add Single Contact");
-        console.log("2. Add Multiple Contacts");
-        console.log("3. View All Contacts");
-        console.log("4. Exit");
+    displayWelcomeMessage(): void {
+        console.log("  Welcome to my Address Book Program");
     }
 
-    private getContactDetails(): IContactData {
-        console.log("\nEnter Contact Details:");
-        return {
-            firstName: readline.question("First Name: "),
-            lastName: readline.question("Last Name: "),
-            address: readline.question("Address: "),
-            city: readline.question("City: "),
-            state: readline.question("State: "),
-            zip: readline.question("Zip Code (6 digits): "),
-            phone: readline.question("Phone (+91XXXXXXXXXX): "),
-            email: readline.question("Email: ")
-        };
+    start(): void {
+        this.displayWelcomeMessage();
+        const addressBookName = readlineSync.question("\n Enter a name for your Address book: ")
+        console.log(`\nAddress Book "${addressBookName}" created successfully!!"`)
+        this.addMultipleContactFromConsole();
     }
 
-    private addMultipleContactsFlow(): void {
-        const contacts: IContactData[] = [];
-        let addMore = true;
-
-        while (addMore) {
-            console.log(`\nContact #${contacts.length + 1}`);
-            contacts.push(this.getContactDetails());
-            addMore = readline.question("Add another? (y/n): ").toLowerCase() === 'y';
+    private displayAllContacts() : void {
+        const allContacts = this.addressBook.getAllContacts()
+        console.log("\n All Contacts in Address Book:");
+        if(allContacts.length === 0){
+            console.log("No contacts found");
+        } else {
+            allContacts.forEach((contact, index) => {
+                console.log(`\n Contact #${index+1}`);
+                contact.displayContact()
+            })
         }
-
-        const {success, errors} = this.addressBook.addMultipleContacts(contacts);
         
-        console.log(`\n Added ${success.length} contacts successfully`);
-        if (errors.length > 0) {
-            console.log("\n Errors:");
-            errors.forEach((err, i) => console.log(`${i + 1}. ${err}`));
+    }
+    private addMultipleContactFromConsole(): void {
+    //* UC5 - Ability to add multiple person to Address Book
+    let continueAdding = true;
+
+    while (continueAdding) {
+        const shouldAdd = readlineSync.question("\n Do you want to add a new contact? (y/n): ");
+        if (shouldAdd.toLowerCase() !== "y") {
+            continueAdding = false;
+            break;
+        }
+
+        console.log("\n Add the contact details:");
+        const firstName = readlineSync.question("Enter First Name: ");
+        const lastName = readlineSync.question("Enter Last Name: ");
+        const address = readlineSync.question("Enter Address: ");
+        const city = readlineSync.question("Enter City: ");
+        const state = readlineSync.question("Enter State: ");
+
+         //* Additional implementation - Regex validations for zip, phonenumber and email
+        let zip = parseInt(readlineSync.question("Enter new Zip Code: "));
+        while(!isValidZipCode(zip)){
+            zip = parseInt(readlineSync.question("Invalid zip. Enter a correct zip code : --> "))
+        }
+
+        let phoneNumber = parseInt(readlineSync.question("Enter new Phone Number: "));
+        while(!isValidPhoneNumber(phoneNumber)) {
+            phoneNumber = parseInt(readlineSync.question("Invalid Phone number. Enter a Valid 10 digit Phone number : --> "))
+        }
+        let email = readlineSync.question("Enter new Email: ");
+        while(!isValidEmail(email)){
+            email = readlineSync.question("Invalid email. Enter a valid email : --> ")
+        }
+        
+        const contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
+        this.addressBook.addContact(contact);
+
+        //* UC3 - Ability to edit existing contact
+        const shouldEdit = readlineSync.question("\nDo you want to edit this contact now? (y/n): ");
+        if (shouldEdit.toLowerCase() === "y") {
+            this.addressBook.editContactByName(firstName);
+        }
+
+        //* UC4 - Ability to delete the contact
+        const shouldDelete = readlineSync.question("\nDo you want to delete this contact? (y/n): ");
+        if (shouldDelete.toLowerCase() === "y") {
+            this.addressBook.deleteContactByName(firstName);
         }
     }
-
-    public run(): void {
-        console.log(" Welcome to Address Book System");
-
-        while (true) {
-            this.showMenu();
-            const choice = readline.question("Choose option (1-4): ");
-
-            switch (choice) {
-                case "1":
-                    try {
-                        const contact = this.addressBook.addContact(this.getContactDetails());
-                        console.log("\n Contact added:\n" + contact.toString());
-                    } catch (error) {
-                        console.error("\n Error:", error instanceof Error ? error.message : "Invalid contact");
-                    }
-                    break;
-
-                case "2":
-                    this.addMultipleContactsFlow();
-                    break;
-
-                case "3":
-                    const contacts = this.addressBook.getAllContacts();
-                    console.log("\n All Contacts:");
-                    contacts.forEach((c, i) => console.log(`${i + 1}. ${c.toString()}\n`));
-                    break;
-
-                case "4":
-                    console.log(" Goodbye!");
-                    return;
-
-                default:
-                    console.log(" Invalid option");
-            }
-        }
-    }
+    this.displayAllContacts();
 }
 
-// Start the application
-new AddressBookApp().run();
+}
+const app = new AddressBookMain();
+app.start();
+
