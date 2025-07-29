@@ -1,5 +1,5 @@
 import { Contact } from "../models/ContactPeron"
-import { isValidEmail, isValidAddress, isValidCityOrState, isValidName, isValidPhoneNumber, isValidZipCode } from "../Utils/Validator";
+import { isValidEmail, isValidAddress, isValidCityOrState, isValidName, isValidPhoneNumber, isValidZipCode } from "../Utils//Validator";
 import { getInput , getNumericInput} from "../Utils/Input";
 
 export class AddressBook {
@@ -13,7 +13,7 @@ export class AddressBook {
             (c)=> c.equals(contact)
         )
         if(isDublicate){
-            console.log(`\n Dublicate contact! "${contact.firstName} ${contact.lastName}" Already exists in the Address Book! "`);
+            console.log(`\nDublicate contact! "${contact.firstName} ${contact.lastName}" Already exists in the Address Book! "`);
             return
         }
         this.contacts.push(contact)
@@ -27,7 +27,7 @@ export class AddressBook {
     editContactByName(firstName: string): boolean {
         const contact = this.contacts.find(c => c.firstName.toLowerCase() === firstName.toLowerCase());
         if (!contact) {
-            console.log(` Contact with name "${firstName}" not found.`);
+            console.log(`Contact with name "${firstName}" not found.`);
             return false;
         }
 
@@ -82,6 +82,32 @@ export class AddressBook {
 
     searchByState(state: string): Contact[] {
         return this.contacts.filter(c => c.state.toLowerCase() === state.toLowerCase());
+    }
+
+    //* UC9 : Ability to view Persons by city or state
+
+    getContactsByCity(): Map<string, Contact[]> {
+        const cityMap = new Map<string, Contact[]>() 
+        this.contacts.forEach(contact => {
+            const city = contact.city
+            if(!cityMap.has(city)){
+                cityMap.set(city, [])
+            }
+            cityMap.get(city)!.push(contact)
+        })
+        return cityMap
+    }
+
+    getContactsbyState() : Map<string, Contact[]> {
+        const stateMap = new Map<string, Contact[]> () 
+        this.contacts.forEach(contact => {
+            const state = contact.state
+            if(!stateMap.has(state)){
+                stateMap.set(state,[])
+            }
+            stateMap.get(state)!.push(contact)
+        }) 
+        return stateMap
     }
  }
 

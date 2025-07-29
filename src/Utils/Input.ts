@@ -9,7 +9,7 @@ export function getInput(prompt: string, validator?: (value: string) => boolean,
         const input = readlineSync.question(prompt);
         if (allowEmpty && input.trim() === "") return "";  // <-- allow skipping
         if (!validator || validator(input)) return input;
-        console.log(errorMsg || "Invalid input. Please try again.");
+        console.log(errorMsg || " Invalid input. Please try again.");
     }
 }
 

@@ -8,18 +8,19 @@ export class AddressBookMain {
     private addressBooks : Map<string , AddressBook> = new Map(); 
 
     displayWelcomeMessage(): void {
-        console.log("\n Welcome to my Address Book Program");
+        console.log("\n  Welcome to my Address Book Program");
     }
 
     start(): void {
         this.displayWelcomeMessage();
         let exit = false
         while(!exit){
-            console.log(`\n  Main Menu: 
+            console.log(`\n Main Menu: 
             1. Add New Address book
             2. Open Existing Address book
             3. Search person by City/State
-            4. Exit `);    
+            4. View persons by city/State
+            5. Exit `);    
         const choice = getInput("\nEnter your choice: ")
         switch(choice) {
             case "1" : 
@@ -31,7 +32,10 @@ export class AddressBookMain {
             case "3" :
                 this.searchAcrossAddressBooks()
                 break;
-            case "4" :
+            case "4" : 
+                this.viewPersonsByCityOrState()
+                break;
+            case "5" :
                 console.log("\n Exiting the program.....")
                 exit = true
                 break
@@ -58,7 +62,7 @@ export class AddressBookMain {
 
    private openExistingAddressBook(): void {
         if (this.addressBooks.size === 0) {
-            console.log("\n No Address Books available. Please create one first.");
+            console.log("\n  No Address Books available. Please create one first.");
             return;
         }
 
@@ -78,6 +82,8 @@ export class AddressBookMain {
         const manager = new AddressBookManager(addressBook, name);
         manager.manage();
     }
+    //* UC8 - Search person Accross city/state
+
     private searchAcrossAddressBooks(): void {
     if (this.addressBooks.size === 0) {
         console.log("\n No Address Books available.");
@@ -129,6 +135,62 @@ export class AddressBookMain {
             r.contact.displayContact();
         });
     }
-}
+  }
+
+  //* UC9 - View Person by city or state
+
+  private viewPersonsByCityOrState()  : void {
+    if(this.addressBooks.size === 0){
+        console.log("\n No Address Books available.");
+        return
+    }
+    console.log(`
+     View Menu:
+       1. View by City
+       2. View by State
+       3. Back to Main Menu
+    `);
+    const choice = getInput("Choose an option: ")
+    let combinedMap = new Map<string, Contact[]>()
+    switch(choice) {
+        case "1":
+            //merge all city maps
+            this.addressBooks.forEach(book => {
+                book.getContactsByCity().forEach((contacts, city) => {
+                    if(!combinedMap.has(city)){
+                        combinedMap.set(city, [])
+                    }
+                    combinedMap.get(city)!.push(...contacts)
+                })
+            })
+            break;
+
+        case "2" :
+            //merge all state maps
+            this.addressBooks.forEach(book => {
+                book.getContactsbyState().forEach((contacts, state) => {
+                    if(!combinedMap.has(state)){
+                        combinedMap.set(state, [])
+                    }
+                    combinedMap.get(state)!.push(...contacts)
+                })
+            })
+            break;
+        case "3" :
+            return 
+        default: 
+            console.log(" Invalid option. Returning to main menu.");
+            return
+    }
+     // Display grouped results
+    if (combinedMap.size === 0) {
+        console.log("\n No contacts found.");
+    } else {
+        combinedMap.forEach((contacts, key) => {
+            console.log(`\n ${key} (${contacts.length}):`);
+            contacts.forEach(contact => console.log(` - ${contact.firstName} ${contact.lastName}`));
+        });
+    }
+  }
 }
 
