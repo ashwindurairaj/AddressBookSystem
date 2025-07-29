@@ -113,7 +113,7 @@ export class ReportManager {
     //* UC10 - Count contacts by City or State
     public countContactsByCityOrState(): void {
         if (this.addressBooks.size === 0) {
-            console.log("\n⚠️  No Address Books available.");
+            console.log("\n  No Address Books available.");
             return;
         }
         console.log(`

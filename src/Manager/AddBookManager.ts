@@ -19,7 +19,7 @@ export class AddressBookManager {
             2. Edit contact
             3. Delete Contact 
             4. Display all contacts
-            5. Sort Contacts by Name
+            5. Sort Contacts (by Name/city/state/zip)
             6. Back to Main Menu`);
 
            const option = getInput("Choose an option: ");
@@ -39,13 +39,13 @@ export class AddressBookManager {
                     this.displayAllContacts();
                     break;
                 case "5" :
-                    this.displaySortedContacts()
+                    this.displaySortedContactsByField()
                     break;   
                 case "6":
                     backToMainMenu = true;
                     break;
                 default:
-                    console.warn("Invalid option. Choose between 1-5.");
+                    console.warn("Invalid option. Choose between 1-7.");
             }
         }
     }
@@ -61,17 +61,50 @@ export class AddressBookManager {
         }
     }
 
-    private displaySortedContacts() : void {
-        const sorted = this.addressBook.getSortedContactsbyName()
-        if(sorted.length === 0){
-            console.log("\n  No contacts found.");
+    private displaySortedContactsByField() : void {
+        const allContacts = this.addressBook.getAllContacts()
+        if(allContacts.length === 0) {
+            console.log("Currently no contacts available right now add first!!");
             return;
+        } else {
+        console.log(`\n Sort Contacts By:
+         1. Name
+         2. City
+         3. State
+         4. Zip
+         5. Back
+        `);
+        const choice = getInput("Choose an option: ")
+        let field :  "name" | "city" | "state" | "zip"
+        switch(choice){
+            case "1" : 
+                field = "name";
+                break
+            case "2" : 
+                field = "city"
+                break;
+            case "3" : 
+                field = "state"
+                break;
+            case "4" :
+                field = "zip"
+                break;
+            case "5" : 
+                return;
+            default: console.log("Invalid option.");
+                return;
         }
-        console.log("\n Sorted Contacts (Alphabetically by first Name): ");
-        sorted.forEach((contact,index) => {
-            console.log(`\nContact #${index+1}`);
-            console.log(contact.toString());
+        const sorted = this.addressBook.getSortedContactsByField(field)
+        if(sorted.length === 0){
+            console.log("\n No contacts found.");
+            return
+        }
+        console.log(`\n Sorted Contacts by ${field.toUpperCase()}:`);
+        sorted.forEach((contact, index) => {
+            console.log(`\nContact #${index + 1}`);
+            console.log(contact.toString())  
         })
+    }
     }
    private addContact(): void {
     console.log("\n Add the contact details:");
@@ -82,7 +115,7 @@ export class AddressBookManager {
     const city = getInput("Enter City: ", isValidCityOrState, "Invalid city. Must be at least 3 characters.");
     const state = getInput("Enter State: ", isValidCityOrState, "Invalid state. Must be at least 3 characters.");
 
-    const zip = getNumericInput("Enter Zip Code: ", isValidZipCode, "Invalid zip. Must be 5-6 digits.");
+    const zip = Number(getNumericInput("Enter Zip Code: ", isValidZipCode, "Invalid zip. Must be 5-6 digits."));
     const phoneNumber = getNumericInput("Enter Phone Number: ", isValidPhoneNumber, "Invalid phone. Must be 10 digits starting with 6-9.");
     const email = getInput("Enter Email: ", isValidEmail, "Invalid email format.");
 

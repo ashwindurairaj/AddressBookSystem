@@ -17,7 +17,7 @@ export class AddressBookMain {
         let exit = false
         const reportManager = new ReportManager(this.addressBooks)
         while(!exit){
-            console.log(`\n Main Menu: 
+            console.log(`\n  Main Menu: 
             1. Add New Address book
             2. Open Existing Address book
             3. Search person by City/State
@@ -55,7 +55,7 @@ export class AddressBookMain {
         const name = getInput(
             "\nEnter a name for the new Address Book: ",
             isValidAddressBookName,
-            " Invalid name. Must start with uppercase and have at least 3 letters."
+            "Invalid name. Must start with uppercase and have at least 3 letters."
         );
         if (this.addressBooks.has(name)) {
             console.log(" Address Book already exists. Choose a different name.");
