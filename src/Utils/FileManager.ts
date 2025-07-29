@@ -55,4 +55,27 @@ export class FileManager {
         console.log(`\n Address Book CSV loaded: ${filePath}`);
         return csvData;
     }
+
+    //* UC15 - Add Json File and load methods
+
+    public static saveToJSON(fileName: string, contacts: Contact[]): void {
+    this.ensureFolderExists();
+    const filePath = path.join(this.folderPath, fileName);
+    const jsonData = JSON.stringify(contacts, null, 2); // Pretty-print with 2 spaces
+    fs.writeFileSync(filePath, jsonData, "utf-8");
+    console.log(`\n Address Book saved as JSON: ${filePath}`);
+}
+
+public static readFromJSON(fileName: string): Contact[] | null {
+    this.ensureFolderExists();
+    const filePath = path.join(this.folderPath, fileName);
+    if (!fs.existsSync(filePath)) {
+        console.log(`\n File not found: ${filePath}`);
+        return null;
+    }
+    const jsonData = fs.readFileSync(filePath, "utf-8");
+    console.log(`\n Address Book JSON loaded: ${filePath}`);
+    return JSON.parse(jsonData);
+}
+
 }
