@@ -1,5 +1,5 @@
 import { Contact } from "../models/ContactPeron"
-import { isValidEmail, isValidAddress, isValidCityOrState, isValidName, isValidPhoneNumber, isValidZipCode } from "../Utils//Validator";
+import { isValidEmail, isValidAddress, isValidCityOrState, isValidName, isValidPhoneNumber, isValidZipCode } from "../Utils/Validator";
 import { getInput , getNumericInput} from "../Utils/Input";
 
 export class AddressBook {
@@ -71,7 +71,7 @@ export class AddressBook {
             console.log("The contact detail is not found");
         }
         const removed = this.contacts.splice(index, 1)[0];
-        console.log(`\n Contact "${removed.firstName} ${removed.lastName}" deleted successfully!\n`);
+        console.log(`\  Contact "${removed.firstName} ${removed.lastName}" deleted successfully!\n`);
         return true
     }
     //* UC8 : Ability to search person in a city or state accross the multiple book
