@@ -13,11 +13,11 @@ export class AddressBook {
             (c)=> c.equals(contact)
         )
         if(isDublicate){
-            console.log(`\n Dublicate contact! "${contact.firstName} ${contact.lastName}" Already exists in the Address Book! "`);
+            console.log(`\nDublicate contact! "${contact.firstName} ${contact.lastName}" Already exists in the Address Book! "`);
             return
         }
         this.contacts.push(contact)
-        console.log("\n Contact added successfully!\n");
+        console.log("\n  Contact added successfully!\n");
     } 
     getAllContacts() : Contact[] {
         return this.contacts
@@ -27,7 +27,7 @@ export class AddressBook {
     editContactByName(firstName: string): boolean {
         const contact = this.contacts.find(c => c.firstName.toLowerCase() === firstName.toLowerCase());
         if (!contact) {
-            console.log(` Contact with name "${firstName}" not found.`);
+            console.log(`Contact with name "${firstName}" not found.`);
             return false;
         }
 
