@@ -17,7 +17,7 @@ export class AddressBookMain {
         let exit = false
         const reportManager = new ReportManager(this.addressBooks)
         while(!exit){
-            console.log(`\n  Main Menu: 
+            console.log(`\n Main Menu: 
             1. Add New Address book
             2. Open Existing Address book
             3. Search person by City/State

@@ -18,7 +18,7 @@ export class ReportManager {
         }
 
         console.log(`
-        Search Menu:
+        🔍 Search Menu:
         1. Search by City
         2. Search by State
         3. Back to Main Menu
@@ -53,7 +53,7 @@ export class ReportManager {
         if (results.length === 0) {
             console.log(`\n No contacts found for "${searchTerm}".`);
         } else {
-            console.log(`\ Found ${results.length} contact(s) for "${searchTerm}":`);
+            console.log(`\n Found ${results.length} contact(s) for "${searchTerm}":`);
             results.forEach((r, index) => {
                 console.log(`\n[${index + 1}] Address Book: ${r.bookName}`);
                 r.contact.displayContact();
@@ -113,7 +113,7 @@ export class ReportManager {
     //* UC10 - Count contacts by City or State
     public countContactsByCityOrState(): void {
         if (this.addressBooks.size === 0) {
-            console.log("\n  No Address Books available.");
+            console.log("\n⚠️  No Address Books available.");
             return;
         }
         console.log(`

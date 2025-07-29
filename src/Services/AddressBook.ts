@@ -71,7 +71,7 @@ export class AddressBook {
             console.log("The contact detail is not found");
         }
         const removed = this.contacts.splice(index, 1)[0];
-        console.log(`\  Contact "${removed.firstName} ${removed.lastName}" deleted successfully!\n`);
+        console.log(`\n  Contact "${removed.firstName} ${removed.lastName}" deleted successfully!\n`);
         return true
     }
     //* UC8 : Ability to search person in a city or state accross the multiple book
@@ -108,6 +108,12 @@ export class AddressBook {
             stateMap.get(state)!.push(contact)
         }) 
         return stateMap
+    }
+
+    getSortedContactsbyName() : Contact[] {
+        return [...this.contacts].sort((a,b) => 
+         a.firstName.localeCompare(b.firstName)
+        )
     }
  }
 

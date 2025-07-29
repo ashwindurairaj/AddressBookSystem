@@ -19,7 +19,8 @@ export class AddressBookManager {
             2. Edit contact
             3. Delete Contact 
             4. Display all contacts
-            5. Back to Main Menu`);
+            5. Sort Contacts by Name
+            6. Back to Main Menu`);
 
            const option = getInput("Choose an option: ");
             switch (option) {
@@ -37,7 +38,10 @@ export class AddressBookManager {
                 case "4":
                     this.displayAllContacts();
                     break;
-                case "5":
+                case "5" :
+                    this.displaySortedContacts()
+                    break;   
+                case "6":
                     backToMainMenu = true;
                     break;
                 default:
@@ -48,7 +52,7 @@ export class AddressBookManager {
    private displayAllContacts(): void {
         const allContacts = this.addressBook.getAllContacts();
         if (allContacts.length === 0) {
-            console.log("\n No contacts found.");
+            console.log("\n  No contacts found.");
         } else {
             allContacts.forEach((contact, index) => {
                 console.log(`\nContact #${index + 1}`);
@@ -57,6 +61,18 @@ export class AddressBookManager {
         }
     }
 
+    private displaySortedContacts() : void {
+        const sorted = this.addressBook.getSortedContactsbyName()
+        if(sorted.length === 0){
+            console.log("\n  No contacts found.");
+            return;
+        }
+        console.log("\n Sorted Contacts (Alphabetically by first Name): ");
+        sorted.forEach((contact,index) => {
+            console.log(`\nContact #${index+1}`);
+            console.log(contact.toString());
+        })
+    }
    private addContact(): void {
     console.log("\n Add the contact details:");
 
@@ -72,5 +88,6 @@ export class AddressBookManager {
 
     const contact = new Contact(firstName, lastName, address, city, state, zip!, phoneNumber!, email);
     this.addressBook.addContact(contact);
-}
+ }
+
 }
