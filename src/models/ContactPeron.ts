@@ -30,7 +30,7 @@ export class Contact {
 
     //* UC11 - Override toString for nice printing
     toString(): string {
-        return ` ${this.firstName} ${this.lastName} |  ${this.address}, ${this.city}, ${this.state} - ${this.zip} |  ${this.phoneNumber} | ${this.email}`;
+        return ` ${this.firstName} ${this.lastName} |  ${this.address}, ${this.city}, ${this.state} - ${this.zip} |  ${this.phoneNumber} |  ${this.email}`;
     }
 
 }

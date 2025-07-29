@@ -3,6 +3,7 @@ import { AddressBook } from "../Services/AddressBook";
 import { Contact } from "../models/ContactPeron";
 import {isValidName, isValidAddress, isValidCityOrState  ,isValidEmail, isValidPhoneNumber, isValidZipCode } from "../Utils/Validator";
 import { getInput , getNumericInput } from "../Utils/Input";
+import { FileManager } from "../Utils/FileManager";
 
 export class AddressBookManager {
     private addressBook : AddressBook
@@ -96,7 +97,7 @@ export class AddressBookManager {
         }
         const sorted = this.addressBook.getSortedContactsByField(field)
         if(sorted.length === 0){
-            console.log("\n No contacts found.");
+            console.log("\n  No contacts found.");
             return
         }
         console.log(`\n Sorted Contacts by ${field.toUpperCase()}:`);

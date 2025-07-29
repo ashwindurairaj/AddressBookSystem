@@ -2,8 +2,8 @@ import { AddressBook } from "../Services/AddressBook";
 import { AddressBookManager } from "../Manager/AddBookManager";
 import { getInput } from "../Utils/Input";
 import { isValidAddressBookName } from "../Utils/Validator";
-import { Contact } from "../models/ContactPeron";
 import { ReportManager } from "../Manager/ReportManager";
+import { FileManager } from "../Utils/FileManager";
 
 export class AddressBookMain {
     private addressBooks : Map<string , AddressBook> = new Map(); 
@@ -23,7 +23,9 @@ export class AddressBookMain {
             3. Search person by City/State
             4. View persons by city/State
             5. Count contacts by City/State
-            6. Exit `);    
+            6. Save Address Book to File
+            7. Load Address Book from File
+            8. Exit `); 
         const choice = getInput("\nEnter your choice: ")
         switch(choice) {
             case "1" : 
@@ -41,12 +43,10 @@ export class AddressBookMain {
             case "5" :
                 reportManager.countContactsByCityOrState()
                 break
-            case "6" :
-                console.log("\n Exiting the program.....")
-                exit = true
-                break
-            default: 
-                console.warn("\nInvalid Choice! Please enter 1,2 or 3"); 
+             case "6": this.saveAddressBookToFile(); break;
+                case "7": this.loadAddressBookFromFile(); break;
+                case "8": console.log("\n Exiting the program....."); exit = true; break;
+                default: console.warn("\nInvalid Choice! Please enter 1–8");
             }
         }
     }
@@ -55,7 +55,7 @@ export class AddressBookMain {
         const name = getInput(
             "\nEnter a name for the new Address Book: ",
             isValidAddressBookName,
-            "Invalid name. Must start with uppercase and have at least 3 letters."
+            " Invalid name. Must start with uppercase and have at least 3 letters."
         );
         if (this.addressBooks.has(name)) {
             console.log(" Address Book already exists. Choose a different name.");
@@ -88,6 +88,31 @@ export class AddressBookMain {
         const manager = new AddressBookManager(addressBook, name);
         manager.manage();
     }
+
     
+    private saveAddressBookToFile(): void {
+        if (this.addressBooks.size === 0) {
+            console.log("\n No Address Books to save.");
+            return;
+        }
+        console.log("\n Available Address Books:");
+        [...this.addressBooks.keys()].forEach((name, index) => console.log(`${index + 1}. ${name}`));
+        const bookName = getInput("Enter the name of the Address Book to save: ");
+        const addressBook = this.addressBooks.get(bookName.trim());
+        if (!addressBook) {
+            console.log(" Address Book not found.");
+            return;
+        }
+        const fileName = getInput("Enter file name to save (e.g., mybook.txt): ");
+        FileManager.saveToFile(fileName, addressBook.getAllContacts());
+    }
+
+    private loadAddressBookFromFile(): void {
+        const fileName = getInput("Enter file name to load: ");
+        const data = FileManager.readFromFile(fileName);
+        if (data) {
+            console.log("\nLoaded Data:\n" + data);
+        }
+    }
 }
 
